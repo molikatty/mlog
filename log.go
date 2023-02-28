@@ -5,6 +5,8 @@ import (
 	"os"
 	"strings"
 	"sync"
+
+	"github.com/wzshiming/ctc"
 )
 
 type writer interface {
@@ -39,15 +41,20 @@ func Logger() *Log {
 }
 
 func (log *Log) Err(perfix, msg string) {
-	log.OutMsg(log.Stderr, perfix, msg)
+	log.OutMsg(log.Stdout, ctc.ForegroundRed.String()+perfix+ctc.Reset.String(), msg)
 }
 
 func (log *Log) Info(perfix, msg string) {
-	log.OutMsg(log.Stdout, perfix, msg)
+	log.OutMsg(log.Stdout, ctc.ForegroundGreen.String()+perfix+ctc.Reset.String(), msg)
+}
+
+func (log *Log) Warning(perfix, msg string) {
+	log.OutMsg(log.Stdout, ctc.ForegroundYellow.String()+perfix+ctc.Reset.String(), msg)
 }
 
 func (log *Log) OutMsg(w writer, perfix, msg string) {
 	var s strings.Builder
+	s.Grow(len(perfix) + len(msg) + 1)
 	s.WriteString(perfix)
 	s.WriteString(" ")
 	s.WriteString(msg)

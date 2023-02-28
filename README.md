@@ -1,1 +1,1 @@
-# 一个简单的log
+# a simple logger
